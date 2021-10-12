@@ -166,7 +166,7 @@ pub fn create_auction(
     // Configure Auction.
     AuctionData {
         authority: args.authority,
-        bid_state: bid_state,
+        bid_state,
         end_auction_at: args.end_auction_at,
         end_auction_gap: args.end_auction_gap,
         ended_at: None,

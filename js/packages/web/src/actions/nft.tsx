@@ -15,7 +15,7 @@ import {
   toPublicKey,
   WalletSigner,
   Attribute,
-} from '@oyster/common';
+} from '@batafy/common';
 import React, { Dispatch, SetStateAction } from 'react';
 import { MintLayout, Token } from '@solana/spl-token';
 import {
@@ -25,7 +25,7 @@ import {
   TransactionInstruction,
 } from '@solana/web3.js';
 import crypto from 'crypto';
-import { getAssetCostToStore } from '../utils/assets';
+// import { getAssetCostToStore } from '../utils/assets';
 import { AR_SOL_HOLDER_ID } from '../utils/ids';
 import BN from 'bn.js';
 

@@ -1,4 +1,4 @@
-import { StringPublicKey } from '@oyster/common';
+import { StringPublicKey } from '@batafy/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useEffect, useState } from 'react';
 import {

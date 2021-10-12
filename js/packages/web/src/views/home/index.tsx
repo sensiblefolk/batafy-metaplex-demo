@@ -1,6 +1,6 @@
 import { Layout } from 'antd';
 import React from 'react';
-import { useStore } from '@oyster/common';
+import { useStore } from '@batafy/common';
 import { useMeta } from '../../contexts';
 import { AuctionListView } from './auctionList';
 import { SetupView } from './setup';
@@ -14,6 +14,7 @@ export const HomeView = () => {
   return (
     <Layout style={{ margin: 0, marginTop: 30, alignItems: 'center' }}>
       {showAuctions ? <AuctionListView /> : <SetupView />}
+
     </Layout>
   );
 };

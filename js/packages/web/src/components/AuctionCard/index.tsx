@@ -22,9 +22,12 @@ import {
   useWalletModal,
   VaultState,
   BidStateType,
-} from '@oyster/common';
+  WinningConfigType,
+  BidRedemptionTicket,
+  MAX_PRIZE_TRACKING_TICKET_SIZE
+} from '@batafy/common';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { AuctionView, useBidsForAuction, useUserBalance } from '../../hooks';
+import { AuctionView, useBidsForAuction, useUserBalance, useUserBataCards } from '../../hooks';
 import { sendPlaceBid } from '../../actions/sendPlaceBid';
 // import { bidAndClaimInstantSale } from '../../actions/bidAndClaimInstantSale';
 import { AuctionNumbers } from './../AuctionNumbers';
@@ -36,17 +39,12 @@ import { sendCancelBid } from '../../actions/cancelBid';
 import { startAuctionManually } from '../../actions/startAuctionManually';
 import BN from 'bn.js';
 import { Confetti } from '../Confetti';
-import { QUOTE_MINT } from '../../constants';
+import {BATA_CARD_MASTEREDITION_KEY, QUOTE_MINT} from '../../constants';
 import { Connection, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useMeta } from '../../contexts';
 import moment from 'moment';
 import { AccountLayout, MintLayout } from '@solana/spl-token';
 import { findEligibleParticipationBidsForRedemption } from '../../actions/claimUnusedPrizes';
-import {
-  BidRedemptionTicket,
-  MAX_PRIZE_TRACKING_TICKET_SIZE,
-  WinningConfigType,
-} from '@oyster/common/dist/lib/models/metaplex/index';
 
 async function calculateTotalCostOfRedeemingOtherPeoplesBids(
   connection: Connection,
@@ -190,6 +188,7 @@ export const AuctionCard = ({
 
   const wallet = useWallet();
   const { setVisible } = useWalletModal();
+  // const { userBataCards } = useUserBataCards()
   const connect = useCallback(
     () => (wallet.wallet ? wallet.connect().catch() : setVisible(true)),
     [wallet.wallet, wallet.connect, setVisible],
@@ -223,6 +222,7 @@ export const AuctionCard = ({
     winnerIndex = auctionView.auction.info.bidState.getWinnerIndex(
       auctionView.myBidderPot?.info.bidderAct,
     );
+
   const priceFloor =
     auctionView.auction.info.priceFloor.type === PriceFloorType.Minimum
       ? auctionView.auction.info.priceFloor.minPrice?.toNumber() || 0
@@ -477,8 +477,8 @@ export const AuctionCard = ({
             fontSize: '2rem',
           }}
         >
-          Your {auctionView.isInstantSale ? 'purchase' : 'bid'} has been
-          redeemed please view your NFTs in <Link to="/artworks">My Items</Link>
+          Your {auctionView.isInstantSale ? 'purchase' : 'bid'} has been redeemed
+          {/* please view your NFTs in <Link to="/artworks">My Items</Link>*/}
           .
         </p>
         <Button
@@ -550,6 +550,7 @@ export const AuctionCard = ({
                   (allowBidToPublic || allowBidToAuctionOwner)
                 ) {
                   try {
+                    console.log('instant started')
                     const bid = await sendPlaceBid(
                       connection,
                       wallet,
@@ -558,6 +559,7 @@ export const AuctionCard = ({
                       accountByMint,
                       instantSalePrice,
                     );
+                    console.log('instant sale running', bid)
                     setLastBid(bid);
                   } catch (e) {
                     console.error('sendPlaceBid', e);
@@ -567,13 +569,7 @@ export const AuctionCard = ({
                   }
                 }
 
-                const newAuctionState = await update(
-                  auctionView.auction.pubkey,
-                  wallet.publicKey,
-                );
-                auctionView.auction = newAuctionState[0];
-                auctionView.myBidderPot = newAuctionState[1];
-                auctionView.myBidderMetadata = newAuctionState[2];
+
                 // Claim the purchase
                 try {
                   await sendRedeemBid(
@@ -586,7 +582,14 @@ export const AuctionCard = ({
                     bidRedemptions,
                     bids,
                   ).then(async () => {
-                    await update();
+                    // await update();
+                    const newAuctionState = await update(
+                      auctionView.auction.pubkey,
+                      wallet.publicKey,
+                    );
+                    auctionView.auction = newAuctionState[0];
+                    auctionView.myBidderPot = newAuctionState[1];
+                    auctionView.myBidderMetadata = newAuctionState[2];
                     setShowBidModal(false);
                     setShowRedeemedBidModal(true);
                   });

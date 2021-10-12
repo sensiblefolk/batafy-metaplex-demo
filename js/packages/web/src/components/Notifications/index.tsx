@@ -3,6 +3,7 @@ import {
   LoadingOutlined,
   PlayCircleOutlined,
   SyncOutlined,
+  BellOutlined,
 } from '@ant-design/icons';
 import {
   findProgramAddress,
@@ -13,10 +14,10 @@ import {
   useUserAccounts,
   VaultState,
   WalletSigner,
-} from '@oyster/common';
+} from '@batafy/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection } from '@solana/web3.js';
-import { Badge, Popover, List } from 'antd';
+import { Badge, Popover, List,  } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { closePersonalEscrow } from '../../actions/closePersonalEscrow';
@@ -494,16 +495,19 @@ export function Notifications() {
       placement="bottomLeft"
       content={content}
       trigger="click"
+
     >
-      <h1 className="title">M</h1>
+      <BellOutlined style={{ fontSize: "25px", }}/>
     </Popover>
   );
 
   if (notifications.length === 0) return justContent;
   else
     return (
-      <Badge count={notifications.length} style={{ backgroundColor: 'white' }}>
-        {justContent}
-      </Badge>
+      <span style={{marginRight: "20px"}}>
+        <Badge count={notifications.length} style={{ backgroundColor: 'white' }}>
+          {justContent}
+        </Badge>
+      </span>
     );
 }

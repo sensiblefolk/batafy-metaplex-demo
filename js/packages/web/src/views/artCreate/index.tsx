@@ -32,7 +32,7 @@ import {
   MetaplexOverlay,
   MetadataFile,
   StringPublicKey,
-} from '@oyster/common';
+} from '@batafy/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { getAssetCostToStore, LAMPORT_MULTIPLIER } from '../../utils/assets';
 import { Connection } from '@solana/web3.js';
@@ -234,8 +234,8 @@ const CategoryStep = (props: {
       <Row className="call-to-action">
         <h2>Create a new item</h2>
         <p>
-          First time creating on Metaplex?{' '}
-          <a href="#">Read our creators’ guide.</a>
+          First time selling on Batafy?{' '}
+          <a href="#">Read our sellers’ guide.</a>
         </p>
       </Row>
       <Row justify={width < 768 ? 'center' : 'start'}>
@@ -646,7 +646,7 @@ const InfoStep = (props: {
               }
             />
           </label>
-          {/* <label className="action-field">
+          <label className="action-field">
             <span className="field-title">Symbol</span>
             <Input
               className="input"
@@ -660,7 +660,7 @@ const InfoStep = (props: {
                 })
               }
             />
-          </label> */}
+          </label>
 
           <label className="action-field">
             <span className="field-title">Description</span>
@@ -1173,8 +1173,8 @@ const WaitingStep = (props: {
         <Steps direction="vertical" current={props.step}>
           <Step title="Minting" description="Starting Mint Process" icon={setIconForStep(props.step, 0)} />
           <Step title="Preparing Assets" icon={setIconForStep(props.step, 1)} />
-          <Step title="Signing Metadata Transaction" description="Approve the transaction from your wallet" icon={setIconForStep(props.step, 2)}  /> 
-          <Step title="Sending Transaction to Solana" description="This will take a few seconds." icon={setIconForStep(props.step, 3)} /> 
+          <Step title="Signing Metadata Transaction" description="Approve the transaction from your wallet" icon={setIconForStep(props.step, 2)}  />
+          <Step title="Sending Transaction to Solana" description="This will take a few seconds." icon={setIconForStep(props.step, 3)} />
           <Step title="Waiting for Initial Confirmation" icon={setIconForStep(props.step, 4)} />
           <Step title="Waiting for Final Confirmation" icon={setIconForStep(props.step, 5)} />
           <Step title="Uploading to Arweave" icon={setIconForStep(props.step, 6)} />
@@ -1196,12 +1196,12 @@ const Congrats = (props: {
 
   const newTweetURL = () => {
     const params = {
-      text: "I've created a new NFT artwork on Metaplex, check it out!",
+      text: "I am bartering this item on Batafy, Come Trade!",
       url: `${window.location.origin
         }/#/art/${props.nft?.metadataAccount.toString()}`,
-      hashtags: 'NFT,Crypto,Metaplex',
+      hashtags: 'NFT,Crypto,Batafy, Barter, Exchange, Metaplex',
       // via: "Metaplex",
-      related: 'Metaplex,Solana',
+      related: 'Metaplex,Solana,Batafy,Barter',
     };
     const queryParams = new URLSearchParams(params).toString();
     return `https://twitter.com/intent/tweet?${queryParams}`;
@@ -1213,14 +1213,14 @@ const Congrats = (props: {
       <>
         <div className="waiting-title">Sorry, there was an error!</div>
         <p>{props.alert}</p>
-        <Button onClick={_ => history.push("/art/create")}>Back to Create NFT</Button>
+        <Button onClick={_ => history.push("/art/create")}>Back to Listing</Button>
       </>
     )
   }
 
   return (
     <>
-      <div className="waiting-title">Congratulations, you created an NFT!</div>
+      <div className="waiting-title">Congratulations, your listing was successful!</div>
       <div className="congrats-button-container">
         <Button
           className="metaplex-button"

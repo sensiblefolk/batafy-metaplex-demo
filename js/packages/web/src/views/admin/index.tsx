@@ -13,10 +13,6 @@ import {
 } from 'antd';
 import { useMeta } from '../../contexts';
 import {
-  Store,
-  WhitelistedCreator,
-} from '@oyster/common/dist/lib/models/metaplex/index';
-import {
   MasterEditionV1,
   notify,
   ParsedAccount,
@@ -27,7 +23,9 @@ import {
   useUserAccounts,
   useWalletModal,
   WalletSigner,
-} from '@oyster/common';
+  WhitelistedCreator,
+  Store
+} from '@batafy/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection } from '@solana/web3.js';
 import { saveAdmin } from '../../actions/saveAdmin';

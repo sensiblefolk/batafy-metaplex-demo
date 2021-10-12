@@ -4,12 +4,12 @@ import {
   StoreProvider,
   WalletProvider,
   MetaProvider,
-} from '@oyster/common';
+} from '@batafy/common';
 import React, { FC } from 'react';
 import { ConfettiProvider } from './components/Confetti';
 import { AppLayout } from './components/Layout';
 import { LoaderProvider } from './components/Loader';
-import { CoingeckoProvider } from './contexts/coingecko';
+import { CoingeckoProvider } from './contexts';
 
 export const Providers: FC = ({ children }) => {
   return (

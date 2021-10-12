@@ -146,12 +146,12 @@ export const AuctionCreateView = () => {
   const [auctionObj, setAuctionObj] =
     useState<
       | {
-          vault: StringPublicKey;
-          auction: StringPublicKey;
-          auctionManager: StringPublicKey;
-        }
+      vault: StringPublicKey;
+      auction: StringPublicKey;
+      auctionManager: StringPublicKey;
+    }
       | undefined
-    >(undefined);
+      >(undefined);
   const [attributes, setAttributes] = useState<AuctionState>({
     reservationPrice: 0,
     items: [],
@@ -339,7 +339,7 @@ export const AuctionCreateView = () => {
             while (
               oldRangeCtr < oldRanges.length ||
               tierRangeCtr < tierRanges.length
-            ) {
+              ) {
               let toAdd = new BN(0);
               if (
                 tierRangeCtr < tierRanges.length &&
@@ -366,7 +366,7 @@ export const AuctionCreateView = () => {
               ) {
                 oldRanges[oldRangeCtr].length = oldRanges[
                   oldRangeCtr
-                ].length.sub(tierRanges[tierRangeCtr].length);
+                  ].length.sub(tierRanges[tierRangeCtr].length);
 
                 ranges.push(
                   new AmountRange({
@@ -384,7 +384,7 @@ export const AuctionCreateView = () => {
               ) {
                 tierRanges[tierRangeCtr].length = tierRanges[
                   tierRangeCtr
-                ].length.sub(oldRanges[oldRangeCtr].length);
+                  ].length.sub(oldRanges[oldRangeCtr].length);
 
                 ranges.push(
                   new AmountRange({
@@ -441,23 +441,23 @@ export const AuctionCreateView = () => {
       endAuctionAt: isInstantSale
         ? null
         : new BN(
-            (attributes.auctionDuration || 0) *
-              (attributes.auctionDurationType == 'days'
-                ? 60 * 60 * 24 // 1 day in seconds
-                : attributes.auctionDurationType == 'hours'
-                ? 60 * 60 // 1 hour in seconds
-                : 60), // 1 minute in seconds
-          ), // endAuctionAt is actually auction duration, poorly named, in seconds
+          (attributes.auctionDuration || 0) *
+          (attributes.auctionDurationType == 'days'
+            ? 60 * 60 * 24 // 1 day in seconds
+            : attributes.auctionDurationType == 'hours'
+              ? 60 * 60 // 1 hour in seconds
+              : 60), // 1 minute in seconds
+        ), // endAuctionAt is actually auction duration, poorly named, in seconds
       auctionGap: isInstantSale
         ? null
         : new BN(
-            (attributes.gapTime || 0) *
-              (attributes.gapTimeType == 'days'
-                ? 60 * 60 * 24 // 1 day in seconds
-                : attributes.gapTimeType == 'hours'
-                ? 60 * 60 // 1 hour in seconds
-                : 60), // 1 minute in seconds
-          ),
+          (attributes.gapTime || 0) *
+          (attributes.gapTimeType == 'days'
+            ? 60 * 60 * 24 // 1 day in seconds
+            : attributes.gapTimeType == 'hours'
+              ? 60 * 60 // 1 hour in seconds
+              : 60), // 1 minute in seconds
+        ),
       priceFloor: new PriceFloor({
         type: attributes.priceFloor
           ? PriceFloorType.Minimum
@@ -481,8 +481,8 @@ export const AuctionCreateView = () => {
     const safetyDepositDrafts = isOpenEdition
       ? []
       : attributes.category !== AuctionCategory.Tiered
-      ? attributes.items
-      : tieredAttributes.items;
+        ? attributes.items
+        : tieredAttributes.items;
     const participationSafetyDepositDraft = isOpenEdition
       ? attributes.items[0]
       : attributes.participationNFT;
@@ -694,7 +694,7 @@ const CategoryStep = (props: {
       <Row className="call-to-action">
         <h2>List an item</h2>
         <p>
-          First time listing on Batafy? <a href="#">Read our seller guide.</a>
+          First time listing on Batafy? <a>Read our sellers' guide.</a>
         </p>
       </Row>
       <Row justify={width < 768 ? 'center' : 'start'}>
@@ -731,6 +731,35 @@ const CategoryStep = (props: {
             <Button
               className="type-btn"
               size="large"
+              onClick={() => props.confirm(AuctionCategory.Open)}
+            >
+              <div>
+                <div>Open Edition</div>
+                <div className="type-btn-description">
+                  Sell unlimited copies of a single Master NFT
+                </div>
+              </div>
+            </Button>
+          </Row>
+          <Row>
+            <Button
+              className="type-btn"
+              size="large"
+              onClick={() => props.confirm(AuctionCategory.Tiered)}
+            >
+              <div>
+                <div>Tiered Auction</div>
+                <div className="type-btn-description">
+                  Participants get unique rewards based on their leaderboard
+                  rank
+                </div>
+              </div>
+            </Button>
+          </Row>
+          <Row>
+            <Button
+              className="type-btn"
+              size="large"
               onClick={() => props.confirm(AuctionCategory.Single)}
             >
               <div>
@@ -749,10 +778,10 @@ const CategoryStep = (props: {
 };
 
 const InstantSaleStep = ({
-  attributes,
-  setAttributes,
-  confirm,
-}: {
+                           attributes,
+                           setAttributes,
+                           confirm,
+                         }: {
   attributes: AuctionState;
   setAttributes: (attr: AuctionState) => void;
   confirm: () => void;
@@ -1443,10 +1472,10 @@ const TierTableStep = (props: {
                   selected={
                     (i as TierDummyEntry).safetyDepositBoxIndex !== undefined
                       ? [
-                          props.attributes.items[
-                            (i as TierDummyEntry).safetyDepositBoxIndex
+                        props.attributes.items[
+                          (i as TierDummyEntry).safetyDepositBoxIndex
                           ],
-                        ]
+                      ]
                       : []
                   }
                   setSelected={items => {
@@ -1469,14 +1498,14 @@ const TierTableStep = (props: {
                       if (
                         items[0].masterEdition &&
                         items[0].masterEdition.info.key ==
-                          MetadataKey.MasterEditionV1
+                        MetadataKey.MasterEditionV1
                       ) {
                         myNewTier.winningConfigType =
                           WinningConfigType.PrintingV1;
                       } else if (
                         items[0].masterEdition &&
                         items[0].masterEdition.info.key ==
-                          MetadataKey.MasterEditionV2
+                        MetadataKey.MasterEditionV2
                       ) {
                         myNewTier.winningConfigType =
                           WinningConfigType.PrintingV2;
@@ -1551,8 +1580,8 @@ const TierTableStep = (props: {
                           myNewTier.safetyDepositBoxIndex &&
                           props.attributes.items[
                             myNewTier.safetyDepositBoxIndex
-                          ].masterEdition?.info.key ==
-                            MetadataKey.MasterEditionV1
+                            ].masterEdition?.info.key ==
+                          MetadataKey.MasterEditionV1
                         ) {
                           value = WinningConfigType.PrintingV1;
                         }
@@ -1581,7 +1610,7 @@ const TierTableStep = (props: {
                     {((i as TierDummyEntry).winningConfigType ===
                       WinningConfigType.PrintingV1 ||
                       (i as TierDummyEntry).winningConfigType ===
-                        WinningConfigType.PrintingV2) && (
+                      WinningConfigType.PrintingV2) && (
                       <label className="action-field">
                         <span className="field-title">
                           How many copies do you want to create for each winner?
@@ -1798,8 +1827,8 @@ const ReviewStep = (props: {
           value={
             props.attributes.startSaleTS
               ? moment
-                  .unix(props.attributes.startSaleTS as number)
-                  .format('dddd, MMMM Do YYYY, h:mm a')
+                .unix(props.attributes.startSaleTS as number)
+                .format('dddd, MMMM Do YYYY, h:mm a')
               : 'Right after successfully published'
           }
         />
@@ -1820,8 +1849,8 @@ const ReviewStep = (props: {
           value={
             props.attributes.endTS
               ? moment
-                  .unix(props.attributes.endTS as number)
-                  .format('dddd, MMMM Do YYYY, h:mm a')
+                .unix(props.attributes.endTS as number)
+                .format('dddd, MMMM Do YYYY, h:mm a')
               : 'Until sold'
           }
         />
@@ -1879,7 +1908,7 @@ const WaitingStep = (props: {
     >
       <Progress type="circle" percent={progress} />
       <div className="waiting-title">
-        Your creation is being listed on Batafy...
+        Your creation is being listed with Batafy...
       </div>
       <div className="waiting-subtitle">This can take up to 30 seconds.</div>
     </div>
@@ -1897,7 +1926,7 @@ const Congrats = (props: {
 
   const newTweetURL = () => {
     const params = {
-      text: "I've created a new barter auction on Batafy, check it out!",
+      text: "I've created a new NFT auction on Batafy, check it out!",
       url: `${
         window.location.origin
       }/#/auction/${props.auction?.auction.toString()}`,

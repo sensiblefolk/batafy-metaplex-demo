@@ -26,7 +26,7 @@ export const ConnectButton = (props: ConnectButtonProps) => {
 
   if (!wallet || !allowWalletChange) {
     return (
-      <Button {...rest} onClick={handleClick} disabled={connected && disabled}>
+      <Button style={{ backgroundColor: "#EE483C", color: "white", borderColor: "#EE483C"}} {...rest} size="large" onClick={handleClick} disabled={connected && disabled}>
         {connected ? props.children : 'Connect'}
       </Button>
     );

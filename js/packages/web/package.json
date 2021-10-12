@@ -6,7 +6,7 @@
     "@babel/preset-typescript": "^7.12.13",
     "@cloudflare/stream-react": "^1.1.0",
     "@google/model-viewer": "^1.7.2",
-    "@oyster/common": "0.0.2",
+    "@batafy/common": "0.0.5",
     "@project-serum/serum": "^0.13.52",
     "@solana/spl-name-service": "0.1.3",
     "@solana/spl-token": "0.1.6",

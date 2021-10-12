@@ -7,7 +7,7 @@ import {
   StringPublicKey,
   useMeta,
   USE_SPEED_RUN,
-} from '@oyster/common';
+} from '@batafy/common';
 
 export const useHighestBidForAuction = (
   auctionPubkey: StringPublicKey | string,
@@ -22,12 +22,7 @@ export const useHighestBidForAuction = (
 
 export const useBidsForAuction = (auctionPubkey: StringPublicKey | string) => {
   const id = useMemo(
-    () =>
-      typeof auctionPubkey === 'string'
-        ? auctionPubkey !== ''
-          ? auctionPubkey
-          : undefined
-        : auctionPubkey,
+    () => (auctionPubkey !== '' ? auctionPubkey : undefined),
     [auctionPubkey],
   );
   const { bidderMetadataByAuctionAndBidder } = useMeta();

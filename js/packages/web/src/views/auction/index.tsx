@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Row, Col, Button, Skeleton, Carousel, List, Card } from 'antd';
 import { AuctionCard } from '../../components/AuctionCard';
 import { Connection } from '@solana/web3.js';
-import { AuctionViewItem } from '@oyster/common/dist/lib/models/metaplex/index';
+import { AuctionViewItem } from '@batafy/common/dist/lib/models/metaplex/index';
 import {
   AuctionView as Auction,
   useArt,
@@ -25,8 +25,8 @@ import {
   useMint,
   AuctionState,
   StringPublicKey,
-  toPublicKey,
-} from '@oyster/common';
+  toPublicKey, ParsedAccount, Metadata,
+} from '@batafy/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { MintInfo } from '@solana/spl-token';
 import { getHandleAndRegistryKey } from '@solana/spl-name-service';
@@ -35,6 +35,8 @@ import { CheckOutlined } from '@ant-design/icons';
 import { useMemo } from 'react';
 import { ArtType } from '../../types';
 import { ClickToCopy  } from '../../components/ClickToCopy';
+import { useMeta } from "@batafy/common";
+import { BATA_CARD_MASTEREDITION_KEY } from "../../constants";
 
 export const AuctionItem = ({
   item,
@@ -48,7 +50,7 @@ export const AuctionItem = ({
   active?: boolean;
 }) => {
   const id = item.metadata.pubkey;
-  var style: React.CSSProperties = {
+  const style: React.CSSProperties = {
     transform:
       index === 0
         ? ''
@@ -62,7 +64,7 @@ export const AuctionItem = ({
     marginLeft: size > 1 && index === 0 ? '0px' : 'auto',
     background: 'black',
     boxShadow: 'rgb(0 0 0 / 10%) 12px 2px 20px 14px',
-    height: 300,
+    maxWidth: '450px'
   };
   return (
     <ArtContent
@@ -78,6 +80,8 @@ export const AuctionItem = ({
 export const AuctionView = () => {
   const { id } = useParams<{ id: string }>();
   const { env } = useConnectionConfig();
+  const { editions, metadata } = useMeta();
+  const { publicKey, connected } = useWallet()
   const auction = useAuction(id);
   const [currentIndex, setCurrentIndex] = useState(0);
   const art = useArt(auction?.thumbnail.metadata.pubkey);
@@ -93,10 +97,19 @@ export const AuctionView = () => {
   }
   const nftCount = auction?.items.flat().length;
   const winnerCount = auction?.items.length;
+  const purchasedItem = auction?.auction.info.bidState.bids.length
+  // const isInstantSale = auction?.isInstantSale;
 
   const hasDescription = data === undefined || data.description === undefined;
   const description = data?.description;
   const attributes = data?.attributes;
+
+
+
+  useEffect(() => {
+    console.log('price', formatTokenAmount(auction?.auction?.info?.priceFloor?.minPrice))
+    console.log('auctiown', auction)
+  }, [auction])
 
   const items = [
     ...(auction?.items
@@ -125,7 +138,7 @@ export const AuctionView = () => {
 
   return (
     <>
-      <Row justify="space-around" ref={ref}>
+      <Row justify="space-between" ref={ref} gutter={[40, 30]}>
         <Col span={24} md={12} className="pr-4">
           <div className="auction-view" style={{ minHeight: 300 }}>
             <Carousel
@@ -135,39 +148,13 @@ export const AuctionView = () => {
               {items}
             </Carousel>
           </div>
-          <h6>Number Of Winners</h6>
-          <h1>
-            {winnerCount === undefined ? (
-              <Skeleton paragraph={{ rows: 0 }} />
-            ) : (
-              winnerCount
-            )}
-          </h1>
-          <h6>Number Of NFTs</h6>
-          <h1>
-            {nftCount === undefined ? (
-              <Skeleton paragraph={{ rows: 0 }} />
-            ) : (
-              nftCount
-            )}
-          </h1>
-          <h6>About this {nftCount === 1 ? 'NFT' : 'Collection'}</h6>
-          <div className="auction-paragraph">
-            {hasDescription && <Skeleton paragraph={{ rows: 3 }} />}
-            {description ||
-              (winnerCount !== undefined && (
-                <div style={{ fontStyle: 'italic' }}>
-                  No description provided.
-                </div>
-              ))}
-          </div>
 
           {attributes && (
             <>
               <h6>Attributes</h6>
               <List grid={{ column: 4 }}>
-                {attributes.map(attribute => (
-                  <List.Item>
+                {attributes.map((attribute, idx) => (
+                  <List.Item key={idx}>
                     <Card title={attribute.trait_type}>{attribute.value}</Card>
                   </List.Item>
                 ))}
@@ -223,6 +210,26 @@ export const AuctionView = () => {
                 </Button>
               </div>
             </Col>
+            <Col>
+              <h6>Winners</h6>
+              <h1>
+                {winnerCount === undefined ? (
+                  <Skeleton paragraph={{ rows: 0 }} />
+                ) : (
+                  winnerCount
+                )}
+              </h1>
+            </Col>
+            <Col>
+              <h6>Sold</h6>
+              <h1>
+                {nftCount === undefined ? (
+                  <Skeleton paragraph={{ rows: 0 }} />
+                ) : (
+                  <span>{purchasedItem} / {nftCount}</span>
+                )}
+              </h1>
+            </Col>
           </Row>
 
           {!auction && <Skeleton paragraph={{ rows: 6 }} />}
@@ -230,6 +237,18 @@ export const AuctionView = () => {
           {!auction?.isInstantSale && <AuctionBids auctionView={auction} />}
         </Col>
       </Row>
+      <Col style={{ marginTop: '3rem'}}>
+        <h6>About this {nftCount === 1 ? 'NFT' : 'Collection'}</h6>
+        <div className="auction-paragraph">
+          {hasDescription && <Skeleton paragraph={{ rows: 3 }} />}
+          {description ||
+          (winnerCount !== undefined && (
+            <div style={{ fontStyle: 'italic' }}>
+              No description provided.
+            </div>
+          ))}
+        </div>
+      </Col>
     </>
   );
 };
@@ -332,7 +351,7 @@ const BidLine = (props: {
             address={bidder}
           />{' '}
           {bidderTwitterHandle ? (
-            <Row className="pubkey-row"> 
+            <Row className="pubkey-row">
               <a
                 target="_blank"
                 title={shortenAddress(bidder)}
@@ -341,7 +360,7 @@ const BidLine = (props: {
               <ClickToCopy className="copy-pubkey" copyText={bidder as string} />
             </Row>
           ) : (
-            <Row className="pubkey-row"> 
+            <Row className="pubkey-row">
               {shortenAddress(bidder)}
               <ClickToCopy className="copy-pubkey" copyText={bidder as string} />
             </Row>
@@ -382,11 +401,11 @@ export const AuctionBids = ({
   const bidLines = useMemo(() => {
     let activeBidIndex = 0;
     return bids.map((bid, index) => {
-      let isCancelled =
+      const isCancelled =
         (index < winnersCount && !!bid.info.cancelled) ||
         (auctionState !== AuctionState.Ended && !!bid.info.cancelled);
 
-      let line = (
+      const line = (
         <BidLine
           bid={bid}
           index={activeBidIndex}

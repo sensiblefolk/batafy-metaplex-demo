@@ -1,18 +1,15 @@
-import { useWallet } from '@solana/wallet-adapter-react';
-import { Col, Layout, Row, Tabs } from 'antd';
+import {useWallet} from '@solana/wallet-adapter-react';
+import {Divider, Typography} from 'antd';
 import BN from 'bn.js';
-import React, { useMemo, useState } from 'react';
-import Masonry from 'react-masonry-css';
-import { Link } from 'react-router-dom';
-import { AuctionRenderCard } from '../../components/AuctionRenderCard';
-import { CardLoader } from '../../components/MyLoader';
-import { PreSaleBanner } from '../../components/PreSaleBanner';
-import { useMeta } from '../../contexts';
-import { AuctionView, AuctionViewState, useAuctions } from '../../hooks';
+import React from 'react';
+import {Link} from 'react-router-dom';
+import {AuctionRenderCard} from '../../components/AuctionRenderCard';
+import {CardLoader} from '../../components/MyLoader';
+import {useMeta} from '../../contexts';
+import { AuctionViewState, useAuctions} from '../../hooks';
+import { BATA_CARD_MASTEREDITION_KEY} from "../../constants";
 
-const { TabPane } = Tabs;
-
-const { Content } = Layout;
+const { Title } = Typography
 
 export enum LiveAuctionViewState {
   All = '0',
@@ -27,40 +24,32 @@ export const AuctionListView = () => {
     ...useAuctions(AuctionViewState.Ended),
     ...useAuctions(AuctionViewState.BuyNow),
   ];
-  const [activeKey, setActiveKey] = useState(LiveAuctionViewState.All);
   const { isLoading } = useMeta();
-  const { connected, publicKey } = useWallet();
-  const breakpointColumnsObj = {
-    default: 4,
-    1100: 3,
-    700: 2,
-    500: 1,
-  };
+  const {  publicKey } = useWallet();
 
   // Check if the auction is primary sale or not
-  const checkPrimarySale = (auc: AuctionView) => {
-    var flag = 0;
-    auc.items.forEach(i => {
-      i.forEach(j => {
-        if (j.metadata.info.primarySaleHappened == true) {
-          flag = 1;
-          return true;
-        }
-      });
-      if (flag == 1) return true;
-    });
-    if (flag == 1) return true;
-    else return false;
-  };
+  // const checkPrimarySale = (auc: AuctionView) => {
+  //   let flag = 0;
+  //   auc.items.forEach(i => {
+  //     i.forEach(j => {
+  //       if (j.metadata.info.primarySaleHappened) {
+  //         flag = 1;
+  //         return true;
+  //       }
+  //     });
+  //     if (flag == 1) return true;
+  //   });
+  //   return flag == 1;
+  // };
 
-  const resaleAuctions = auctions
-    .sort(
-      (a, b) =>
-        a.auction.info.endedAt
-          ?.sub(b.auction.info.endedAt || new BN(0))
-          .toNumber() || 0,
-    )
-    .filter(m => checkPrimarySale(m) == true);
+  // const resaleAuctions = auctions
+  //   .sort(
+  //     (a, b) =>
+  //       a.auction.info.endedAt
+  //         ?.sub(b.auction.info.endedAt || new BN(0))
+  //         .toNumber() || 0,
+  //   )
+  //   .filter(m => checkPrimarySale(m) == true);
 
   // Removed resales from live auctions
   const liveAuctions = auctions
@@ -70,52 +59,25 @@ export const AuctionListView = () => {
           ?.sub(b.auction.info.endedAt || new BN(0))
           .toNumber() || 0,
     )
-    .filter(a => !resaleAuctions.includes(a));
+    // .filter(a => !resaleAuctions.includes(a));
 
-  let items = liveAuctions;
+  const items = liveAuctions;
 
-  switch (activeKey) {
-    case LiveAuctionViewState.All:
-      items = liveAuctions;
-      break;
-    case LiveAuctionViewState.Participated:
-      items = liveAuctions
-        .concat(auctionsEnded)
-        .filter(
-          (m, idx) =>
-            m.myBidderMetadata?.info.bidderPubkey == publicKey?.toBase58(),
-        );
-      break;
-    case LiveAuctionViewState.Resale:
-      items = resaleAuctions;
-      break;
-    case LiveAuctionViewState.Ended:
-      items = auctionsEnded;
-      break;
+  const participatedAuctions = () => {
+    return [...liveAuctions.concat(auctionsEnded)]
+      .filter(
+        (m) =>
+          m.myBidderMetadata?.info.bidderPubkey == publicKey?.toBase58(),
+      );
   }
 
-  const heroAuction = useMemo(
-    () =>
-      auctions.filter(a => {
-        // const now = moment().unix();
-        return !a.auction.info.ended() && !resaleAuctions.includes(a);
-        // filter out auction for banner that are further than 30 days in the future
-        // return Math.floor(delta / 86400) <= 30;
-      })?.[0],
-    [auctions],
-  );
-
   const liveAuctionsView = (
-    <Masonry
-      breakpointCols={breakpointColumnsObj}
-      className="my-masonry-grid"
-      columnClassName="my-masonry-grid_column"
-    >
-      {!isLoading
-        ? items.map((m, idx) => {
-            if (m === heroAuction) {
-              return;
-            }
+    <div style={{ width: "100%", margin: "2rem 0"}}>
+      <Title level={3} type="secondary" >Live Sale</Title>
+      <Divider />
+      <div className="card" >
+        {!isLoading
+          ? items.map((m, idx) => {
 
             const id = m.auction.pubkey;
             return (
@@ -124,21 +86,17 @@ export const AuctionListView = () => {
               </Link>
             );
           })
-        : [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
-    </Masonry>
+          : [...Array(4)].map((_, idx) => <CardLoader key={idx} />)}
+      </div>
+    </div>
   );
-  const endedAuctions = (
-    <Masonry
-      breakpointCols={breakpointColumnsObj}
-      className="my-masonry-grid"
-      columnClassName="my-masonry-grid_column"
-    >
-      {!isLoading
-        ? auctionsEnded.map((m, idx) => {
-            if (m === heroAuction) {
-              return;
-            }
-
+  const endedAuctionsView = (
+    <div style={{ width: "100%", margin: "2rem 0"}}>
+      <Title level={3} type="secondary">Sale Ended</Title>
+      <Divider />
+      <div className="card">
+        {!isLoading
+          ? auctionsEnded.map((m, idx) => {
             const id = m.auction.pubkey;
             return (
               <Link to={`/auction/${id}`} key={idx}>
@@ -146,63 +104,21 @@ export const AuctionListView = () => {
               </Link>
             );
           })
-        : [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
-    </Masonry>
+          : [...Array(4)].map((_, idx) => <CardLoader key={idx} />)}
+      </div>
+    </div>
   );
 
   return (
     <>
-      <PreSaleBanner auction={heroAuction} />
-      <Layout>
-        <Content style={{ display: 'flex', flexWrap: 'wrap' }}>
-          <Col style={{ width: '100%', marginTop: 10 }}>
-            {liveAuctions.length >= 0 && (
-              <Row>
-                <Tabs
-                  activeKey={activeKey}
-                  onTabClick={key => setActiveKey(key as LiveAuctionViewState)}
-                >
-                  <TabPane
-                    tab={<span className="tab-title">Live Auctions</span>}
-                    key={LiveAuctionViewState.All}
-                  >
-                    {liveAuctionsView}
-                  </TabPane>
-                  {auctionsEnded.length > 0 && (
-                    <TabPane
-                      tab={
-                        <span className="tab-title">Secondary Marketplace</span>
-                      }
-                      key={LiveAuctionViewState.Resale}
-                    >
-                      {liveAuctionsView}
-                    </TabPane>
-                  )}
-                  {auctionsEnded.length > 0 && (
-                    <TabPane
-                      tab={<span className="tab-title">Ended Auctions</span>}
-                      key={LiveAuctionViewState.Ended}
-                    >
-                      {endedAuctions}
-                    </TabPane>
-                  )}
-                  {
-                    // Show all participated live and ended auctions except hero auction
-                  }
-                  {connected && (
-                    <TabPane
-                      tab={<span className="tab-title">Participated</span>}
-                      key={LiveAuctionViewState.Participated}
-                    >
-                      {liveAuctionsView}
-                    </TabPane>
-                  )}
-                </Tabs>
-              </Row>
-            )}
-          </Col>
-        </Content>
-      </Layout>
+      {/*<PreSaleBanner auction={heroAuction} />*/}
+      <div className="text-center title">Welcome to Batafy barter marketplace</div>
+      {liveAuctionsView}
+      {auctionsEnded.length > 0 && (
+        <>
+          {endedAuctionsView}
+        </>
+      )}
     </>
   );
 };

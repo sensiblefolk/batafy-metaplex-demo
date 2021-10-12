@@ -3,7 +3,8 @@
 }
 
 .ant-layout-content {
-  overflow: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 .section {
   padding: 1px;
@@ -99,7 +100,8 @@
   padding: 20px 10px;
 
   /* button/primary/default */
-  background: linear-gradient(180deg, #768bf9 0%, #5870ee 100%);
+  background: #EE483C;
+  border-color: #EE483C;
   border-radius: 8px;
   height: 58px;
 
@@ -120,9 +122,9 @@
 }
 
 .connector {
-  color: #000;
-  background-color: #fff;
-  border-color: #fff;
+  color: #fff;
+  background-color: #EE483C;
+  border-color: #EE483C;
 }
 
 .connector:hover,
@@ -138,9 +140,9 @@
 
 .ant-btn-primary:hover,
 .ant-btn-primary:focus {
-  color: #5969d4;
+  color: #EE483C;
   background: transparent;
-  border-color: #5969d4;
+  border-color: #EE483C;
 }
 
 .create-statistic {
@@ -220,7 +222,7 @@
 
 .selected-card {
   border-width: 3px;
-  border-color: #5870ee !important;
+  border-color: #EE483C !important;
   border-style: solid;
 }
 
@@ -314,4 +316,79 @@
   color: dimgray;
   font-size: 0.8rem;
   margin-bottom: 10px;
+}
+
+.col {
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  flex-flow: column nowrap;
+}
+
+.row {
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  flex-flow: row wrap;
+}
+
+.row-nowrap {
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  flex-flow: row nowrap;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-start {
+  align-items: flex-start;
+}
+
+.align-baseline {
+  align-items: baseline;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+.align-self-end {
+  align-self: flex-end;
+}
+
+.stretch {
+  align-items: stretch;
+}
+
+.center {
+  align-self: center;
+}
+
+.primary-color {
+  color: #EE483C
+}
+
+.card {
+  font-size: 14px;
+  font-weight: normal;
+  padding: 1.0em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px;
+  align-self: center;
+}
+
+.grid-temp-320 {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
