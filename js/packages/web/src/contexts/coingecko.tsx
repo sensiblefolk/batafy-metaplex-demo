@@ -7,14 +7,23 @@ export interface CoingeckoContextState {
   solPrice: number;
 }
 
+const priceMap = new Map<string, number>()
+
 export const solToUSD = async (): Promise<number> => {
-  const url = `${COINGECKO_COIN_PRICE_API}?ids=solana&vs_currencies=usd`;
-  const resp = await window.fetch(url).then(resp => resp.json());
-  return resp.solana.usd;
+  const prevPrice = priceMap.has('sol')
+  try {
+    const url = `${COINGECKO_COIN_PRICE_API}?ids=solana&vs_currencies=usd`;
+    const resp = await window.fetch(url).then(resp => resp.json());
+    priceMap.set('sol', resp.solana.usd)
+    return resp.solana.usd;
+  } catch (error) {
+    return prevPrice ? priceMap.get('sol') as number : 0
+  }
 };
 
 const CoingeckoContext =
   React.createContext<CoingeckoContextState | null>(null);
+// eslint-disable-next-line react/prop-types
 export function CoingeckoProvider({ children = null as any }) {
   const [solPrice, setSolPrice] = useState<number>(0);
 

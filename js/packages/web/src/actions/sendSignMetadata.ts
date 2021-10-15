@@ -4,7 +4,7 @@ import {
   signMetadata,
   StringPublicKey,
   WalletSigner,
-} from '@oyster/common';
+} from '@batafy/common';
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
 
 export async function sendSignMetadata(

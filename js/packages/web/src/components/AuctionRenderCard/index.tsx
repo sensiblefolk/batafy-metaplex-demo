@@ -6,7 +6,7 @@ import {
   PriceFloorType,
   fromLamports,
   useMint,
-} from '@oyster/common';
+} from '@batafy/common';
 import { ArtContent } from '../ArtContent';
 import {
   AuctionView,

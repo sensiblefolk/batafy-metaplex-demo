@@ -8,11 +8,11 @@ import {
   MasterEditionV2,
   Metadata,
   ParsedAccount,
+  pubkeyToString,
   StringPublicKey,
   useLocalStorage,
-  pubkeyToString,
-} from '@oyster/common';
-import { WhitelistedCreator } from '@oyster/common/dist/lib/models/metaplex/index';
+} from '@batafy/common';
+import { WhitelistedCreator } from '@batafy/common/dist/lib/models/metaplex/index';
 import { Cache } from 'three';
 import { useInView } from 'react-intersection-observer';
 
@@ -154,7 +154,7 @@ export const useArt = (key?: StringPublicKey) => {
     [key, metadata],
   );
 
-  const art = useMemo(
+  return useMemo(
     () =>
       metadataToArt(
         account?.info,
@@ -164,8 +164,6 @@ export const useArt = (key?: StringPublicKey) => {
       ),
     [account, editions, masterEditions, whitelistedCreatorsByCreator],
   );
-
-  return art;
 };
 
 export const useExtendedArt = (id?: StringPublicKey) => {

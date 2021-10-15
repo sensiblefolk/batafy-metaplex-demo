@@ -1,18 +1,18 @@
 import {
-  ParsedAccount,
-  Metadata,
-  SafetyDepositBox,
   AuctionData,
+  AuctionDataExtended,
   AuctionState,
   BidderMetadata,
   BidderPot,
-  Vault,
+  createPipelineExecutor,
   MasterEditionV1,
   MasterEditionV2,
+  Metadata,
+  ParsedAccount,
+  SafetyDepositBox,
   StringPublicKey,
-  AuctionDataExtended,
-  createPipelineExecutor,
-} from '@oyster/common';
+  Vault,
+} from '@batafy/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import BN from 'bn.js';
 import { useEffect, useMemo, useState } from 'react';
@@ -22,14 +22,14 @@ import {
   AuctionManagerStatus,
   AuctionManagerV1,
   AuctionManagerV2,
+  AuctionViewItem,
   BidRedemptionTicket,
   BidRedemptionTicketV2,
   getBidderKeys,
   MetaplexKey,
   SafetyDepositConfig,
   WinningConfigType,
-  AuctionViewItem,
-} from '@oyster/common/dist/lib/models/metaplex/index';
+} from '@batafy/common/dist/lib/models/metaplex/index';
 
 export enum AuctionViewState {
   Live = '0',
@@ -66,12 +66,11 @@ type CachedRedemptionKeys = Record<
 
 export function useStoreAuctionsList() {
   const { auctions, auctionManagersByAuction } = useMeta();
-  const result = useMemo(() => {
+  return useMemo(() => {
     return Object.values(auctionManagersByAuction).map(
       manager => auctions[manager.info.auction],
     );
   }, [auctions, auctionManagersByAuction]);
-  return result;
 }
 
 export function useCachedRedemptionKeysByWallet() {
@@ -477,8 +476,7 @@ export function processAccountsIntoAuctionView(
               : 1) &&
         (auctionManager.participationConfig === null ||
           auctionManager.participationConfig === undefined ||
-          (auctionManager.participationConfig !== null &&
-            view.participationItem)) &&
+          view.participationItem) &&
         view.vault
       );
       if (

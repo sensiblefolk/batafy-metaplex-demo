@@ -13,7 +13,7 @@ const { TabPane } = Tabs;
 const { Content } = Layout;
 
 export enum ArtworkViewState {
-  Metaplex = '0',
+  Batafy = '0',
   Owned = '1',
   Created = '2',
 }
@@ -23,7 +23,7 @@ export const ArtworksView = () => {
   const ownedMetadata = useUserArts();
   const createdMetadata = useCreatorArts(publicKey?.toBase58() || '');
   const { metadata, isLoading } = useMeta();
-  const [activeKey, setActiveKey] = useState(ArtworkViewState.Metaplex);
+  const [activeKey, setActiveKey] = useState(ArtworkViewState.Batafy);
   const breakpointColumnsObj = {
     default: 4,
     1100: 3,
@@ -41,8 +41,11 @@ export const ArtworksView = () => {
   useEffect(() => {
     if (connected) {
       setActiveKey(ArtworkViewState.Owned);
+      if (items) {
+        console.log('lighet debug', metadata);
+      }
     } else {
-      setActiveKey(ArtworkViewState.Metaplex);
+      setActiveKey(ArtworkViewState.Batafy);
     }
   }, [connected, setActiveKey]);
 
@@ -55,6 +58,7 @@ export const ArtworksView = () => {
       {!isLoading
         ? items.map((m, idx) => {
             const id = m.pubkey;
+
             return (
               <Link to={`/art/${id}`} key={idx}>
                 <ArtCard
@@ -82,7 +86,7 @@ export const ArtworksView = () => {
             >
               <TabPane
                 tab={<span className="tab-title">All</span>}
-                key={ArtworkViewState.Metaplex}
+                key={ArtworkViewState.Batafy}
               >
                 {artworkGrid}
               </TabPane>

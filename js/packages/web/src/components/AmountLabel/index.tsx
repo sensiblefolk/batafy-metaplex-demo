@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Statistic } from 'antd';
 import { useSolPrice } from '../../contexts';
-import { formatUSD } from '@oyster/common';
+import { formatUSD } from '@batafy/common';
 
 interface IAmountLabel {
   amount: number | string;

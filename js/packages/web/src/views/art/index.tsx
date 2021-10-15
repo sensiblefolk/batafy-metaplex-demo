@@ -14,7 +14,7 @@ import { useParams } from 'react-router-dom';
 import { useArt, useExtendedArt } from '../../hooks';
 
 import { ArtContent } from '../../components/ArtContent';
-import { shortenAddress, useConnection } from '@oyster/common';
+import { shortenAddress, useConnection } from '@batafy/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { MetaAvatar } from '../../components/MetaAvatar';
 import { sendSignMetadata } from '../../actions/sendSignMetadata';
@@ -75,11 +75,11 @@ export const ArtView = () => {
 
   return (
     <Content>
-      <Col>
-        <Row ref={ref}>
-          <Col xs={{ span: 24 }} md={{ span: 12 }} style={{ padding: '30px' }}>
+      <Col style={{marginTop: "40px"}}>
+        <Row ref={ref}  justify={"space-between"} gutter={[40, 30]}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }} >
             <ArtContent
-              style={{ width: '300px', height: '300px', margin: '0 auto' }}
+              style={{  margin: '0 auto', maxWidth: '400px' }}
               height={300}
               width={300}
               className="artwork-image"
@@ -88,6 +88,20 @@ export const ArtView = () => {
               allowMeshRender={true}
               artView={true}
             />
+            {attributes && (
+              <div style={{ paddingTop: "40px"}}>
+                <div className="info-header">Attributes</div>
+                <List size="large" grid={{ column: 4 }}>
+                  {attributes.map(attribute => (
+                    <List.Item key={attribute.trait_type}>
+                      <Card title={attribute.trait_type}>
+                        {attribute.value}
+                      </Card>
+                    </List.Item>
+                  ))}
+                </List>
+              </div>
+            )}
           </Col>
           {/* <Divider /> */}
           <Col
@@ -96,7 +110,7 @@ export const ArtView = () => {
             style={{ textAlign: 'left', fontSize: '1.4rem' }}
           >
             <Row>
-              <div style={{ fontWeight: 700, fontSize: '4rem' }}>
+              <div style={{ fontWeight: 700, fontSize: '3rem' }}>
                 {art.title || <Skeleton paragraph={{ rows: 0 }} />}
               </div>
             </Row>
@@ -202,37 +216,20 @@ export const ArtView = () => {
               onMint={async () => await setRemountArtMinting(prev => prev + 1)}
             />
           </Col>
-          <Col span="12">
-            <Divider />
-            {art.creators?.find(c => !c.verified) && unverified}
-            <br />
-            <div className="info-header">ABOUT THE CREATION</div>
-            <div className="info-content">{description}</div>
-            <br />
-            {/*
+        </Row>
+        <Divider />
+        <Col>
+
+          {art.creators?.find(c => !c.verified) && unverified}
+          <br />
+          <div className="info-header">ABOUT THE CREATION</div>
+          <div className="info-content">{description}</div>
+          <br />
+          {/*
               TODO: add info about artist
             <div className="info-header">ABOUT THE CREATOR</div>
             <div className="info-content">{art.about}</div> */}
-          </Col>
-          <Col span="12">
-            {attributes && (
-              <>
-                <Divider />
-                <br />
-                <div className="info-header">Attributes</div>
-                <List size="large" grid={{ column: 4 }}>
-                  {attributes.map(attribute => (
-                    <List.Item key={attribute.trait_type}>
-                      <Card title={attribute.trait_type}>
-                        {attribute.value}
-                      </Card>
-                    </List.Item>
-                  ))}
-                </List>
-              </>
-            )}
-          </Col>
-        </Row>
+        </Col>
       </Col>
     </Content>
   );

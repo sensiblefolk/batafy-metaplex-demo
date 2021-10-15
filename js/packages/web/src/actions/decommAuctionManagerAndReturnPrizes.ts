@@ -6,11 +6,11 @@ import {
   setAuctionAuthority,
   setVaultAuthority,
   WalletSigner,
-} from '@oyster/common';
+} from '@batafy/common';
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
 import { AuctionView } from '../hooks';
-import { AuctionManagerStatus } from '@oyster/common/dist/lib/models/metaplex/index';
-import { decommissionAuctionManager } from '@oyster/common/dist/lib/models/metaplex/decommissionAuctionManager';
+import { AuctionManagerStatus } from '@batafy/common/dist/lib/models/metaplex/index';
+import { decommissionAuctionManager } from '@batafy/common/dist/lib/models/metaplex/decommissionAuctionManager';
 import { unwindVault } from './unwindVault';
 
 export async function decommAuctionManagerAndReturnPrizes(

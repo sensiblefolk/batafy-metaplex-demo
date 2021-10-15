@@ -75,6 +75,6 @@ export const AUCTION_ID =
   'auctxRXPeJoc4817jDhf4HbjnhEcr1cCXenosMhK5R8' as StringPublicKey;
 
 export const METAPLEX_ID =
-  'p1exdMJcjVao65QdewkaZRUnU6VPSXhus9n2GzWfh98' as StringPublicKey;
+  '9ssPxNbJboCaWStaRJ83WEXtqwkK7fFKuxAEkemgoF3N' as StringPublicKey;
 
 export const SYSTEM = new PublicKey('11111111111111111111111111111111');

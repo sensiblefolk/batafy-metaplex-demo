@@ -7,3 +7,5 @@ export { AuctionView } from './auction';
 export { AuctionCreateView } from './auctionCreate';
 export { ArtworksView } from './artworks';
 export { AnalyticsView } from './analytics';
+export { CardsView } from "./cards"
+export { ProfileView } from "./profile"

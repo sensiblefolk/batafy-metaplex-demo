@@ -3,7 +3,7 @@ import {
   StringPublicKey,
   useMint,
   useUserAccounts,
-} from '@oyster/common';
+} from '@batafy/common';
 import { useEffect, useMemo, useState } from 'react';
 import { useSolPrice } from '../contexts';
 

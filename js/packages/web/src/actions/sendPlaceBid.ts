@@ -8,11 +8,11 @@ import {
   ParsedAccount,
   toPublicKey,
   WalletSigner,
-} from '@oyster/common';
+  approve,
+  createTokenAccount,
+  TokenAccount,
+} from '@batafy/common';
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base';
-import { approve } from '@oyster/common/dist/lib/models/account';
-import { createTokenAccount } from '@oyster/common/dist/lib/actions/account';
-import { TokenAccount } from '@oyster/common/dist/lib/models/account';
 
 import { AccountLayout, MintInfo } from '@solana/spl-token';
 import { AuctionView } from '../hooks';

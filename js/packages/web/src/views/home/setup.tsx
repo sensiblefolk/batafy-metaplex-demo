@@ -1,9 +1,10 @@
+import React from "react";
 import {
   useConnection,
   useStore,
   useWalletModal,
   WhitelistedCreator,
-} from '@oyster/common';
+} from '@batafy/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Button } from 'antd';
 import { useCallback, useEffect, useState } from 'react';

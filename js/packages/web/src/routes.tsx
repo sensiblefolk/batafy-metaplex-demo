@@ -1,3 +1,4 @@
+import React from "react";
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import { Providers } from './providers';
 import {
@@ -10,6 +11,8 @@ import {
   AuctionCreateView,
   AuctionView,
   HomeView,
+  CardsView,
+  ProfileView
 } from './views';
 import { AdminView } from './views/admin';
 import { BillingView } from './views/auction/billing';
@@ -36,6 +39,12 @@ export function Routes() {
               path="/artworks/:id?"
               component={() => <ArtworksView />}
             />
+            <Route
+              exact
+              path="/profile/:id?"
+              component={() => <ProfileView />}
+            />
+            <Route exact path={"/cards/:id?"} component={() => <CardsView />} />
             <Route exact path="/art/:id" component={() => <ArtView />} />
             <Route exact path="/artists/:id" component={() => <ArtistView />} />
             <Route exact path="/artists" component={() => <ArtistsView />} />

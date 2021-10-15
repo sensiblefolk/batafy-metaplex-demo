@@ -1,7 +1,7 @@
 {
-  "name": "@oyster/common",
-  "version": "0.0.2",
-  "description": "Oyster common utilities",
+  "name": "@batafy/common",
+  "version": "0.0.6",
+  "description": "Batafy common utilities",
   "main": "dist/lib/index.js",
   "types": "dist/lib/index.d.ts",
   "exports": {

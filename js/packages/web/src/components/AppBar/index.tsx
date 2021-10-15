@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Dropdown, Menu } from 'antd';
-import { ConnectButton, CurrentUserBadge } from '@oyster/common';
+import { ConnectButton, CurrentUserBadge } from '@batafy/common';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Notifications } from '../Notifications';
 import useWindowDimensions from '../../utils/layout';
@@ -27,13 +27,14 @@ const UserActions = () => {
           {/* <Link to={`#`}>
             <Button className="app-btn">Bids</Button>
           </Link> */}
+          <Notifications />
           {canCreate ? (
             <Link to={`/art/create`}>
               <Button className="app-btn">Create</Button>
             </Link>
           ) : null}
           <Link to={`/auction/create/0`}>
-            <Button className="connector" type="primary">
+            <Button className="connector" size="large" type="primary">
               Sell
             </Button>
           </Link>
@@ -55,13 +56,18 @@ const DefaultActions = ({ vertical = false }: { vertical?: boolean }) => {
       <Link to={`/`}>
         <Button className="app-btn">Explore</Button>
       </Link>
-      <Link to={`/artworks`}>
-        <Button className="app-btn">
-          {connected ? 'My Items' : 'Artworks'}
-        </Button>
-      </Link>
-      <Link to={`/artists`}>
-        <Button className="app-btn">Creators</Button>
+      {connected && (
+        <Link to={`/profile`}>
+          <Button className="app-btn">
+            Profile
+          </Button>
+        </Link>
+      )}
+      {/*<Link to={`/artists`}>*/}
+      {/*  <Button className="app-btn">Creators</Button>*/}
+      {/*</Link>*/}
+      <Link to={`/cards`}>
+        <Button className="app-btn">Bata Cards</Button>
       </Link>
     </div>
   );
@@ -85,16 +91,21 @@ const MetaplexMenu = () => {
                   <Button className="app-btn">Explore</Button>
                 </Link>
               </Menu.Item>
+              {connected && (
+                <Menu.Item>
+                  <Link to={`/artworks`}>
+                    <Button className="app-btn">
+                      Profile
+                    </Button>
+                  </Link>
+                </Menu.Item>
+              )}
               <Menu.Item>
-                <Link to={`/artworks`}>
-                  <Button className="app-btn">
-                    {connected ? 'My Items' : 'Artworks'}
-                  </Button>
-                </Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to={`/artists`}>
-                  <Button className="app-btn">Creators</Button>
+                {/*<Link to={`/artists`}>*/}
+                {/*  <Button className="app-btn">Creators</Button>*/}
+                {/*</Link>*/}
+                <Link to={`/cards`}>
+                  <Button className="app-btn">Bata Cards</Button>
                 </Link>
               </Menu.Item>
             </Menu>
@@ -114,7 +125,8 @@ export const AppBar = () => {
   return (
     <>
       <div className="app-left app-bar-box">
-        {window.location.hash !== '#/analytics' && <Notifications />}
+        <img className="title" src="/batafy-logo.png" width={"70px"}/>
+
         <div className="divider" />
         <MetaplexMenu />
       </div>
